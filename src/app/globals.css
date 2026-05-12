@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --shadow-panel: 0 20px 80px rgba(2, 6, 23, 0.48);
+}
+
+:root {
+  --font-sans:
+    "Inter", "Segoe UI", "Helvetica Neue", Arial, ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono:
+    "IBM Plex Mono", "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono",
+    Menlo, monospace;
+  --font-display-stack:
+    "Clash Display", "Cabinet Grotesk", var(--font-sans), sans-serif;
+  --font-body-stack: "Satoshi", "General Sans", var(--font-sans), sans-serif;
+  --background: #050816;
+  --foreground: #f8fbff;
+  --card: rgba(10, 15, 28, 0.8);
+  --card-foreground: #f8fbff;
+  --popover: rgba(7, 10, 20, 0.94);
+  --popover-foreground: #f8fbff;
+  --primary: #9be7ff;
+  --primary-foreground: #02111f;
+  --secondary: rgba(143, 155, 179, 0.08);
+  --secondary-foreground: #e9f5ff;
+  --muted: rgba(144, 164, 200, 0.1);
+  --muted-foreground: rgba(235, 243, 255, 0.62);
+  --accent: #34d399;
+  --accent-foreground: #03140d;
+  --border: rgba(214, 230, 255, 0.1);
+  --input: rgba(214, 230, 255, 0.08);
+  --ring: rgba(125, 211, 252, 0.36);
+  --sidebar: rgba(8, 13, 25, 0.78);
+  --sidebar-foreground: rgba(248, 251, 255, 0.92);
+  --sidebar-border: rgba(214, 230, 255, 0.08);
+  --radius: 1.5rem;
+  --shadow-ambient:
+    0 30px 100px rgba(2, 6, 23, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+* {
+  border-color: var(--border);
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(56, 189, 248, 0.16),
+      transparent 18%
+    ),
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(99, 102, 241, 0.12),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 60% 70%,
+      rgba(52, 211, 153, 0.08),
+      transparent 20%
+    ),
+    linear-gradient(180deg, #030712 0%, #050816 44%, #02040c 100%);
+  color: var(--foreground);
+  font-family: var(--font-body-stack);
+  text-rendering: optimizeLegibility;
+}
+
+body::selection {
+  background: rgba(125, 211, 252, 0.26);
+  color: #fff;
+}
+
+a,
+button,
+[role="button"],
+input,
+textarea,
+summary {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 0 4px rgba(125, 211, 252, 0.18);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.22);
+}
+
+.ambient-grid {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: drift-grid 18s linear infinite;
+}
+
+.animated-gradient {
+  background-size: 180% 180%;
+  animation: gradient-flow 10s ease infinite;
+}
+
+.text-gradient {
+  background-image: linear-gradient(
+    135deg,
+    #f8fbff 0%,
+    #93e7ff 45%,
+    #91f1c8 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.landing-display-hero {
+  font-size: clamp(3.6rem, 8vw, 6.35rem);
+  line-height: 1.02;
+  letter-spacing: -0.065em;
+}
+
+.landing-display-section {
+  font-size: clamp(2.3rem, 4.2vw, 3.55rem);
+  line-height: 1.06;
+  letter-spacing: -0.055em;
+}
+
+.landing-display-card {
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.landing-body-lg {
+  font-size: clamp(1.04rem, 1.2vw, 1.16rem);
+  line-height: 1.9;
+}
+
+.landing-body-md {
+  font-size: clamp(0.98rem, 1vw, 1.04rem);
+  line-height: 1.85;
+}
+
+.glow-outline {
+  box-shadow:
+    0 0 0 1px rgba(147, 231, 255, 0.08),
+    0 20px 80px rgba(2, 6, 23, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.panel-sheen {
+  position: relative;
+}
+
+.panel-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 28%,
+    transparent 52%
+  );
+  opacity: 0;
+  transform: translateX(-20%);
+  transition:
+    opacity 260ms ease,
+    transform 500ms ease;
+  pointer-events: none;
+}
+
+.panel-sheen:hover::before {
+  opacity: 1;
+  transform: translateX(10%);
+}
+
+.screen-vignette {
+  position: relative;
+}
+
+.screen-vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    transparent 55%,
+    rgba(2, 6, 23, 0.28) 100%
+  );
+  pointer-events: none;
+}
+
+.wallet-adapter-button {
+  height: 2.75rem !important;
+  border: 1px solid rgba(214, 230, 255, 0.12) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.04)
+  ) !important;
+  color: #f8fbff !important;
+  font-family: var(--font-sans), sans-serif !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  box-shadow:
+    0 10px 30px rgba(2, 6, 23, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  background: linear-gradient(
+    180deg,
+    rgba(125, 211, 252, 0.18),
+    rgba(255, 255, 255, 0.06)
+  ) !important;
+}
+
+@keyframes gradient-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes drift-grid {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -20px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(16px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(16px) rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .landing-display-hero {
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-display-hero {
+    line-height: 1.07;
+    letter-spacing: -0.045em;
+  }
+}

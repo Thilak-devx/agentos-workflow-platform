@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id          String      @id @default(cuid())
+  email       String      @unique
+  name        String?
+  avatarUrl   String?
+  wallet      Wallet?
+  agents      Agent[]
+  workflows   Workflow[]
+  vaults      Treasury[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Wallet {
+  id         String   @id @default(cuid())
+  address    String   @unique
+  network    String   @default("devnet")
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Agent {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  status      AgentStatus @default(IDLE)
+  model       String
+  ownerId     String
+  owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  workflows   Workflow[]
+  runs        AgentRun[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Workflow {
+  id           String         @id @default(cuid())
+  name         String
+  status       WorkflowStatus @default(DRAFT)
+  cadence      String
+  lastRunAt    DateTime?
+  ownerId      String
+  owner        User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  primaryAgentId String?
+  primaryAgent Agent?         @relation(fields: [primaryAgentId], references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Treasury {
+  id         String   @id @default(cuid())
+  label      String
+  balanceUsd Decimal  @db.Decimal(18, 2)
+  network    String
+  ownerId    String
+  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AgentRun {
+  id          String   @id @default(cuid())
+  state       String
+  costUsd     Decimal  @db.Decimal(10, 2)
+  latencyMs   Int
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+enum AgentStatus {
+  ACTIVE
+  LEARNING
+  IDLE
+}
+
+enum WorkflowStatus {
+  ACTIVE
+  DRAFT
+  PAUSED
+}
