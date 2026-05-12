@@ -486,6 +486,7 @@ function CommandLibraryItem({
 
 function SavedWorkflowCard({
   workflow,
+  recent,
   pinned,
   archived,
   onTogglePin,
@@ -493,6 +494,7 @@ function SavedWorkflowCard({
   onSelect,
 }: {
   workflow: SavedWorkflow;
+  recent: boolean;
   pinned: boolean;
   archived: boolean;
   onTogglePin: () => void;
@@ -508,7 +510,7 @@ function SavedWorkflowCard({
       category={getWorkflowCategory(workflow.prompt)}
       pinned={pinned}
       archived={archived}
-      recent={Date.now() - new Date(workflow.createdAt).getTime() < 1000 * 60 * 90}
+      recent={recent}
       onPin={onTogglePin}
       onArchive={onToggleArchive}
       onClick={() => onSelect(workflow.workflow, workflow.prompt)}
@@ -1107,7 +1109,12 @@ export function WorkflowGeneratorStudio() {
   const [historyMode, setHistoryMode] = useState<HistoryMode>("history");
   const [librarySearch, setLibrarySearch] = useState("");
   const [inputFocused, setInputFocused] = useState(false);
-  const [shortcutHint, setShortcutHint] = useState("Cmd/Ctrl + Enter");
+  const [shortcutHint] = useState(() =>
+    typeof navigator !== "undefined" && navigator.userAgent.includes("Mac")
+      ? "Cmd + Enter"
+      : "Ctrl + Enter",
+  );
+  const [libraryNow, setLibraryNow] = useState(() => Date.now());
   const parsingTimerRef = useRef<number | null>(null);
 
   useEffect(
@@ -1121,24 +1128,43 @@ export function WorkflowGeneratorStudio() {
 
   useEffect(() => {
     if (streamPhase !== "retrying" && streamPhase !== "unavailable") {
-      setFallbackFrame(0);
-      return;
+      const frame = window.requestAnimationFrame(() => {
+        setFallbackFrame(0);
+      });
+
+      return () => window.cancelAnimationFrame(frame);
     }
 
+    const frame = window.requestAnimationFrame(() => {
+      setFallbackFrame(0);
+    });
     const timer = window.setInterval(() => {
       setFallbackFrame((current) =>
         Math.min(current + 1, fallbackStreamLines.length),
       );
     }, 420);
 
-    return () => window.clearInterval(timer);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearInterval(timer);
+    };
   }, [streamPhase]);
 
   useEffect(() => {
+    const timer = window.setInterval(() => {
+      setLibraryNow(Date.now());
+    }, 60_000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
-    setShortcutHint(
-      navigator.userAgent.includes("Mac") ? "Cmd + Enter" : "Ctrl + Enter",
-    );
+
+    const onFocus = () => setLibraryNow(Date.now());
+    window.addEventListener("focus", onFocus);
+
+    return () => window.removeEventListener("focus", onFocus);
   }, []);
 
   const hasSavedCurrentWorkflow = useMemo(
@@ -1577,6 +1603,10 @@ export function WorkflowGeneratorStudio() {
                   <SavedWorkflowCard
                     key={workflow.id}
                     workflow={workflow}
+                    recent={
+                      libraryNow - new Date(workflow.createdAt).getTime() <
+                      1000 * 60 * 90
+                    }
                     pinned={pinnedWorkflowIds.includes(workflow.id)}
                     archived={archivedWorkflowIds.includes(workflow.id)}
                     onTogglePin={() => togglePinnedWorkflow(workflow.id)}

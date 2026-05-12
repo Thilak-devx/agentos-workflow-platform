@@ -28,17 +28,23 @@ export function TerminalStreamCard({ title, lines }: TerminalStreamCardProps) {
     lineEntries[Math.min(visibleCount - 1, lineEntries.length - 1)]?.line ?? "";
 
   useEffect(() => {
-    setLineEntries(
-      lines.map((line) => ({
-        id: createRuntimeEntityId("terminal-line"),
-        line,
-      })),
-    );
-    setVisibleCount(1);
+    const frame = window.requestAnimationFrame(() => {
+      setLineEntries(
+        lines.map((line) => ({
+          id: createRuntimeEntityId("terminal-line"),
+          line,
+        })),
+      );
+      setVisibleCount(1);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [lines]);
 
   useEffect(() => {
-    setTypedLine("");
+    const frame = window.requestAnimationFrame(() => {
+      setTypedLine("");
+    });
     let index = 0;
 
     const typer = window.setInterval(() => {
@@ -50,7 +56,10 @@ export function TerminalStreamCard({ title, lines }: TerminalStreamCardProps) {
       }
     }, reduceMotion ? 1 : 18);
 
-    return () => window.clearInterval(typer);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearInterval(typer);
+    };
   }, [activeLine, reduceMotion]);
 
   useEffect(() => {

@@ -59,12 +59,15 @@ function buildActivityLine(scenario: DemoScenario, step: number) {
 }
 
 export function DemoModeExperience() {
+  const initialScenario = demoScenarios[0];
   const [selectedScenarioId, setSelectedScenarioId] = useState(
-    demoScenarios[0].id,
+    initialScenario.id,
   );
   const [isPlaying, setIsPlaying] = useState(false);
   const [step, setStep] = useState(0);
-  const [streamLog, setStreamLog] = useState<string[]>([]);
+  const [streamLog, setStreamLog] = useState<string[]>([
+    `Demo ready: ${initialScenario.title}`,
+  ]);
   const [typedCommand, setTypedCommand] = useState("");
   const [terminalQueue, setTerminalQueue] = useState<TerminalLine[]>([]);
   const [isComplete, setIsComplete] = useState(false);
@@ -75,15 +78,6 @@ export function DemoModeExperience() {
       demoScenarios[0],
     [selectedScenarioId],
   );
-
-  useEffect(() => {
-    setStep(0);
-    setIsComplete(false);
-    setTypedCommand("");
-    setTerminalQueue([]);
-    setStreamLog([`Demo ready: ${scenario.title}`]);
-    setIsPlaying(false);
-  }, [scenario.id, scenario.title]);
 
   useEffect(() => {
     if (!isPlaying || isComplete) return;
@@ -109,11 +103,12 @@ export function DemoModeExperience() {
 
   useEffect(() => {
     const nextLine = buildActivityLine(scenario, step);
-    setStreamLog((current) => [nextLine, ...current].slice(0, 8));
-
     const nextCommand = buildTerminalCommand(scenario, step);
-    setTerminalQueue((current) => [nextCommand, ...current].slice(0, 5));
-    setTypedCommand("");
+    const frame = window.requestAnimationFrame(() => {
+      setStreamLog((current) => [nextLine, ...current].slice(0, 8));
+      setTerminalQueue((current) => [nextCommand, ...current].slice(0, 5));
+      setTypedCommand("");
+    });
 
     let charIndex = 0;
     const typer = window.setInterval(() => {
@@ -128,7 +123,10 @@ export function DemoModeExperience() {
       }
     }, 26);
 
-    return () => window.clearInterval(typer);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearInterval(typer);
+    };
   }, [scenario, step]);
 
   const progress = useMemo(() => {
@@ -275,7 +273,15 @@ export function DemoModeExperience() {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setSelectedScenarioId(item.id)}
+                  onClick={() => {
+                    setSelectedScenarioId(item.id);
+                    setStep(0);
+                    setIsComplete(false);
+                    setTypedCommand("");
+                    setTerminalQueue([]);
+                    setStreamLog([`Demo ready: ${item.title}`]);
+                    setIsPlaying(false);
+                  }}
                   className={`w-full rounded-[24px] border px-4 py-4 text-left transition ${
                     item.id === scenario.id
                       ? "border-cyan-300/20 bg-cyan-400/[0.08]"

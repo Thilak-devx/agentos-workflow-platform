@@ -113,7 +113,11 @@ export function AppShell({ children }: AppShellProps) {
   const page = pageMeta[currentNavPath] ?? pageMeta["/dashboard"];
 
   useEffect(() => {
-    setMounted(true);
+    const frame = window.requestAnimationFrame(() => {
+      setMounted(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {

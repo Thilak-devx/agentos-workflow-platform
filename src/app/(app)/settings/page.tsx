@@ -315,9 +315,13 @@ export default function SettingsPage() {
       : fallbackEnrichedSnapshots;
 
   useEffect(() => {
-    setNotificationPrefs(settings.notificationPrefs);
-    setWorkspaceMode(settings.workspaceMode);
-    setApprovalThreshold(settings.approvalThreshold);
+    const frame = window.requestAnimationFrame(() => {
+      setNotificationPrefs(settings.notificationPrefs);
+      setWorkspaceMode(settings.workspaceMode);
+      setApprovalThreshold(settings.approvalThreshold);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [settings]);
 
   const filteredSnapshots = useMemo(() => {

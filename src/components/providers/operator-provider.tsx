@@ -99,7 +99,9 @@ export function OperatorProvider({ children }: OperatorProviderProps) {
   useEffect(() => {
     const client = getSupabaseBrowserClientOrNull();
 
-    void refresh();
+    queueMicrotask(() => {
+      void refresh();
+    });
 
     if (!client) return;
 

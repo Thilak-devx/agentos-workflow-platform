@@ -15,11 +15,8 @@ export function useChartDimensions<T extends HTMLDivElement>() {
     width: 0,
     height: 0,
   });
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
     const node = ref.current;
     if (!node) return;
     let frameId = 0;
@@ -60,11 +57,10 @@ export function useChartDimensions<T extends HTMLDivElement>() {
 
   return {
     ref,
-    mounted,
+    mounted: dimensions.width > 0 || dimensions.height > 0,
     width: dimensions.width,
     height: dimensions.height,
     ready:
-      mounted &&
       dimensions.width >= MIN_READY_DIMENSION &&
       dimensions.height >= MIN_READY_DIMENSION,
   };

@@ -180,7 +180,16 @@ export function CommandPalette() {
   const [assistant, setAssistant] = useState<AssistantState>(
     initialAssistantState,
   );
-  const [history, setHistory] = useState<CommandHistoryItem[]>([]);
+  const [history, setHistory] = useState<CommandHistoryItem[]>(() => {
+    if (typeof window === "undefined") return [];
+
+    try {
+      const saved = window.sessionStorage.getItem(STORAGE_KEY);
+      return saved ? (JSON.parse(saved) as CommandHistoryItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -199,17 +208,6 @@ export function CommandPalette() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [commandPaletteOpen, setCommandPaletteOpen]);
-
-  useEffect(() => {
-    try {
-      const saved = window.sessionStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setHistory(JSON.parse(saved) as CommandHistoryItem[]);
-      }
-    } catch {
-      // ignore session persistence failures
-    }
-  }, []);
 
   useEffect(() => {
     if (!commandPaletteOpen) return;
@@ -330,10 +328,6 @@ export function CommandPalette() {
     ],
     [agentResults, notificationResults, quickActions, recentCommandItems, routeResults],
   );
-
-  useEffect(() => {
-    setHighlightedIndex(0);
-  }, [query, selectableItems.length]);
 
   function inferIntent(prompt: string): AiIntent {
     const normalized = prompt.toLowerCase();
@@ -497,7 +491,10 @@ export function CommandPalette() {
     );
   }
 
-  const highlightedItem = selectableItems[highlightedIndex];
+  const activeHighlightedIndex = selectableItems.length
+    ? Math.min(highlightedIndex, selectableItems.length - 1)
+    : 0;
+  const highlightedItem = selectableItems[activeHighlightedIndex];
 
   return (
     <Dialog.Root open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen}>
@@ -529,7 +526,10 @@ export function CommandPalette() {
                 <input
                   ref={inputRef}
                   value={query}
-                  onChange={(event) => setQuery(event.target.value)}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                    setHighlightedIndex(0);
+                  }}
                   onKeyDown={(event) => {
                     if (event.key === "ArrowDown") {
                       event.preventDefault();
