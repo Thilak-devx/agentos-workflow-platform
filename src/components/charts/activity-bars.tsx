@@ -2,6 +2,7 @@
 
 import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
 import { useChartDimensions } from "@/components/charts/use-chart-dimensions";
+import { cn } from "@/lib/utils";
 
 type ActivityBar = {
   label: string;
@@ -10,16 +11,21 @@ type ActivityBar = {
 
 type ActivityBarsProps = {
   data: ActivityBar[];
+  className?: string;
 };
 
-export function ActivityBars({ data }: ActivityBarsProps) {
+export function ActivityBars({ data, className }: ActivityBarsProps) {
   const { ref, ready, width, height } =
     useChartDimensions<HTMLDivElement>();
 
   return (
     <div
       ref={ref}
-      className="h-56 min-h-[120px] min-w-full overflow-hidden rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))] p-3 sm:p-4"
+      className={cn(
+        "min-h-[120px] min-w-full overflow-hidden rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))] p-2.5 sm:p-3",
+        "h-44 sm:h-48 lg:h-52",
+        className,
+      )}
     >
       {!ready ? (
         <div className="h-full w-full animate-pulse rounded-[22px] bg-white/[0.03]" />

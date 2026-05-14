@@ -776,17 +776,17 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="automation" className="py-10 sm:py-12 lg:py-14">
+        <section id="automation" className="py-8 sm:py-10 lg:py-12">
           <SectionHeading
             eyebrow="Workflow automation"
             title="A workflow system that behaves like a live operating loop"
             description="Instead of static diagrams, AgentOS shows how orchestration is progressing, which stage is live, and where human trust boundaries actually matter."
           />
 
-          <div className="mt-8 grid gap-4 sm:mt-10 xl:grid-cols-[0.92fr_1.08fr]">
+          <div className="mt-6 grid gap-4 sm:mt-8 xl:grid-cols-[0.92fr_1.08fr]">
             <motion.div {...fadeUp}>
-              <GlassCard className="p-6" glow="cyan">
-                <div className="mb-5 flex items-center justify-between">
+              <GlassCard className="p-5 sm:p-6" glow="cyan">
+                <div className="mb-4 flex items-center justify-between">
                   <div>
                     <Badge variant="cyan">Interactive orchestration</Badge>
                     <h3 className="landing-display-card mt-4 text-3xl font-[family:var(--font-display-stack)] font-semibold text-white">
@@ -795,7 +795,7 @@ export default function Home() {
                   </div>
                   <Layers3 className="h-5 w-5 text-cyan-100" />
                 </div>
-                <ActivityBars data={demoBars} />
+                <ActivityBars data={demoBars} className="h-40 sm:h-44 lg:h-48" />
               </GlassCard>
             </motion.div>
 
@@ -853,14 +853,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="solana" className="py-10 sm:py-12 lg:py-14">
+        <section id="solana" className="py-8 sm:py-10 lg:py-12">
           <SectionHeading
             eyebrow="Solana integration"
             title="Treasury execution feels native to the product, not stapled onto it"
             description="Solana gives AgentOS a fast settlement layer, but the experience is designed around operational clarity, policy control, and real wallet interactions."
           />
 
-          <div className="mt-8 grid gap-4 sm:mt-10 xl:grid-cols-[1.02fr_0.98fr]">
+          <div className="mt-6 grid gap-4 sm:mt-8 xl:grid-cols-[1.02fr_0.98fr]">
             <motion.div {...fadeUp} className="space-y-4">
               <LiveWalletState />
               <GlassCard className="p-5" glow="violet">
