@@ -776,7 +776,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="automation" className="py-8 sm:py-10 lg:py-12">
+        <section
+          id="automation"
+          className="pt-8 pb-5 sm:pt-10 sm:pb-6 lg:pt-12 lg:pb-7"
+        >
           <SectionHeading
             eyebrow="Workflow automation"
             title="A workflow system that behaves like a live operating loop"
@@ -853,7 +856,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="solana" className="py-8 sm:py-10 lg:py-12">
+        <section
+          id="solana"
+          className="pt-5 pb-8 sm:pt-6 sm:pb-10 lg:pt-7 lg:pb-12"
+        >
           <SectionHeading
             eyebrow="Solana integration"
             title="Treasury execution feels native to the product, not stapled onto it"
