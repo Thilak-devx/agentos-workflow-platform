@@ -776,14 +776,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="automation" className="py-16">
+        <section id="automation" className="py-10 sm:py-12 lg:py-14">
           <SectionHeading
             eyebrow="Workflow automation"
             title="A workflow system that behaves like a live operating loop"
             description="Instead of static diagrams, AgentOS shows how orchestration is progressing, which stage is live, and where human trust boundaries actually matter."
           />
 
-          <div className="mt-12 grid gap-4 xl:grid-cols-[0.92fr_1.08fr]">
+          <div className="mt-8 grid gap-4 sm:mt-10 xl:grid-cols-[0.92fr_1.08fr]">
             <motion.div {...fadeUp}>
               <GlassCard className="p-6" glow="cyan">
                 <div className="mb-5 flex items-center justify-between">
@@ -853,14 +853,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="solana" className="py-16">
+        <section id="solana" className="py-10 sm:py-12 lg:py-14">
           <SectionHeading
             eyebrow="Solana integration"
             title="Treasury execution feels native to the product, not stapled onto it"
             description="Solana gives AgentOS a fast settlement layer, but the experience is designed around operational clarity, policy control, and real wallet interactions."
           />
 
-          <div className="mt-12 grid gap-4 xl:grid-cols-[1.02fr_0.98fr]">
+          <div className="mt-8 grid gap-4 sm:mt-10 xl:grid-cols-[1.02fr_0.98fr]">
             <motion.div {...fadeUp} className="space-y-4">
               <LiveWalletState />
               <GlassCard className="p-5" glow="violet">
