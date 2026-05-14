@@ -18,7 +18,7 @@ import {
   Wallet2,
   Zap,
 } from "lucide-react";
-import { ActivityBars } from "@/components/charts/activity-bars";
+import { WorkflowTopologyVisualization } from "@/components/app/workflow-topology-visualization";
 import { useOperatorSession } from "@/components/providers/operator-provider";
 import { SignalFlowChart } from "@/components/charts/signal-flow-chart";
 import { ClientWalletMultiButton } from "@/components/solana/client-wallet-multi-button";
@@ -798,7 +798,7 @@ export default function Home() {
                   </div>
                   <Layers3 className="h-5 w-5 text-cyan-100" />
                 </div>
-                <ActivityBars data={demoBars} className="h-40 sm:h-44 lg:h-48" />
+                <WorkflowTopologyVisualization data={demoBars} />
               </GlassCard>
             </motion.div>
 
