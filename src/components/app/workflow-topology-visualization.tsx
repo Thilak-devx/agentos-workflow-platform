@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -103,7 +102,6 @@ export function WorkflowTopologyVisualization({
   data,
   className,
 }: WorkflowTopologyVisualizationProps) {
-  const reduceMotion = useReducedMotion() ?? false;
   const stages = buildStages(data);
 
   return (
@@ -127,13 +125,9 @@ export function WorkflowTopologyVisualization({
           <div className="hidden items-center justify-center gap-2 lg:flex">
             {stages.map((stage, index) => (
               <div key={stage.id} className="flex items-center gap-2">
-                <StageCard stage={stage} reduceMotion={reduceMotion} compact />
+                <StageCard stage={stage} compact />
                 {index < stages.length - 1 ? (
-                  <Connector
-                    tone={stage.tone}
-                    reduceMotion={reduceMotion}
-                    className="w-9 xl:w-11"
-                  />
+                  <Connector tone={stage.tone} className="w-9 xl:w-11" />
                 ) : null}
               </div>
             ))}
@@ -142,11 +136,10 @@ export function WorkflowTopologyVisualization({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:hidden">
             {stages.map((stage, index) => (
               <div key={stage.id} className="space-y-3">
-                <StageCard stage={stage} reduceMotion={reduceMotion} />
+                <StageCard stage={stage} />
                 {index < stages.length - 1 ? (
                   <Connector
                     tone={stage.tone}
-                    reduceMotion={reduceMotion}
                     vertical
                     className="mx-auto h-6"
                   />
@@ -162,33 +155,15 @@ export function WorkflowTopologyVisualization({
 
 function StageCard({
   stage,
-  reduceMotion,
   compact = false,
 }: {
   stage: Stage;
-  reduceMotion: boolean;
   compact?: boolean;
 }) {
   const tone = toneClasses[stage.tone];
 
   return (
-    <motion.div
-      animate={
-        reduceMotion
-          ? undefined
-          : {
-              y: [0, -1.5, 0],
-            }
-      }
-      transition={
-        reduceMotion
-          ? undefined
-          : {
-              duration: 3.4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }
-      }
+    <div
       className={cn(
         "min-w-0 rounded-[22px] border p-3.5 backdrop-blur-xl",
         "shadow-[0_14px_36px_rgba(2,6,23,0.22)]",
@@ -214,18 +189,16 @@ function StageCard({
         </p>
         <p className="mt-1 text-xs leading-5 text-white/48">{stage.detail}</p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function Connector({
   tone,
-  reduceMotion,
   vertical = false,
   className,
 }: {
   tone: Stage["tone"];
-  reduceMotion: boolean;
   vertical?: boolean;
   className?: string;
 }) {
@@ -241,29 +214,11 @@ function Connector({
     >
       <div
         className={cn(
-          "absolute inset-0 bg-gradient-to-r opacity-70",
+          "h-full w-full bg-gradient-to-r opacity-70",
           toneClass.connector,
           vertical ? "bg-gradient-to-b" : undefined,
         )}
       />
-      {!reduceMotion ? (
-        <motion.div
-          className={cn(
-            "absolute rounded-full bg-white/80 blur-[1px]",
-            vertical ? "left-1/2 h-8 w-1 -translate-x-1/2" : "top-1/2 h-1 w-8 -translate-y-1/2",
-          )}
-          animate={
-            vertical
-              ? { y: ["-65%", "165%"] }
-              : { x: ["-65%", "165%"] }
-          }
-          transition={{
-            duration: 2.2,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      ) : null}
     </div>
   );
 }
