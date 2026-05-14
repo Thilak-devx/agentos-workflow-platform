@@ -9,7 +9,6 @@ import {
   Command,
   Cpu,
   Database,
-  Layers3,
   Orbit,
   Play,
   Radar,
@@ -18,7 +17,6 @@ import {
   Wallet2,
   Zap,
 } from "lucide-react";
-import { WorkflowTopologyVisualization } from "@/components/app/workflow-topology-visualization";
 import { useOperatorSession } from "@/components/providers/operator-provider";
 import { SignalFlowChart } from "@/components/charts/signal-flow-chart";
 import { ClientWalletMultiButton } from "@/components/solana/client-wallet-multi-button";
@@ -27,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { NeuralMesh } from "@/components/visuals/neural-mesh";
 import { useWalletTreasury } from "@/hooks/use-wallet-treasury";
-import { signalChart, workflowBars } from "@/lib/mock-data";
+import { signalChart } from "@/lib/mock-data";
 import { formatSol, shortenAddress } from "@/lib/wallet";
 
 const fadeUp = {
@@ -383,10 +381,6 @@ export default function Home() {
   }, []);
 
   const activeTerminal = terminalBursts[terminalIndex];
-  const demoBars = workflowBars.map((item, index) => ({
-    ...item,
-    value: Math.min(item.value + ((terminalIndex + index) % 3) * 6, 98),
-  }));
   const liveChart = signalChart.map((value, index) =>
     Math.min(value + ((activeStage + index) % 4) * 3, 96),
   );
@@ -786,22 +780,7 @@ export default function Home() {
             description="Instead of static diagrams, AgentOS shows how orchestration is progressing, which stage is live, and where human trust boundaries actually matter."
           />
 
-          <div className="mt-6 grid gap-4 sm:mt-8 xl:grid-cols-[0.92fr_1.08fr]">
-            <motion.div {...fadeUp}>
-              <GlassCard className="p-5 sm:p-6" glow="cyan">
-                <div className="mb-4 flex items-center justify-between">
-                  <div>
-                    <Badge variant="cyan">Interactive orchestration</Badge>
-                    <h3 className="landing-display-card mt-4 text-3xl font-[family:var(--font-display-stack)] font-semibold text-white">
-                      Workflow topology
-                    </h3>
-                  </div>
-                  <Layers3 className="h-5 w-5 text-cyan-100" />
-                </div>
-                <WorkflowTopologyVisualization data={demoBars} />
-              </GlassCard>
-            </motion.div>
-
+          <div className="mx-auto mt-6 max-w-4xl sm:mt-8">
             <motion.div {...fadeUp}>
               <GlassCard className="p-6" glow="violet">
                 <div className="mb-5 flex items-center justify-between">
