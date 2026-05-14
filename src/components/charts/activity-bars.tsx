@@ -31,14 +31,22 @@ export function ActivityBars({ data, className }: ActivityBarsProps) {
         <div className="h-full w-full animate-pulse rounded-[22px] bg-white/[0.03]" />
       ) : null}
       {ready ? (
-        <BarChart width={width} height={height} data={data} barCategoryGap={18}>
+        <BarChart
+          width={width}
+          height={height}
+          data={data}
+          barCategoryGap={18}
+          margin={{ top: 6, right: 8, bottom: 2, left: 8 }}
+        >
           <XAxis
             dataKey="label"
             tickLine={false}
             axisLine={false}
             tick={{ fill: "rgba(255,255,255,0.42)", fontSize: 11 }}
+            interval={0}
+            padding={{ left: 8, right: 8 }}
           />
-          <YAxis hide domain={[0, 100]} />
+          <YAxis hide width={0} domain={[0, 100]} />
           <Bar
             dataKey="value"
             radius={[18, 18, 18, 18]}
